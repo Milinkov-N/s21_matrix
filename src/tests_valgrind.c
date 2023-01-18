@@ -24,6 +24,8 @@ void tc_create_matrix() {
     s21_create_matrix(-4, -4, &mat);
     s21_remove_matrix(&mat);
   }
+
+  { s21_create_matrix(-4, -4, NULL); }
 }
 
 void tc_eq_matrix() {
@@ -66,6 +68,11 @@ void tc_eq_matrix() {
 
   {
     matrix_t mat1 = {0}, mat2 = {0};
+    s21_eq_matrix(&mat1, &mat2);
+  }
+
+  {
+    matrix_t mat1, mat2;
     s21_eq_matrix(&mat1, &mat2);
   }
 }

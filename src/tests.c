@@ -57,6 +57,12 @@ START_TEST(tc04_s21_create_matrix) {
 }
 END_TEST
 
+START_TEST(tc05_s21_create_matrix) {
+  int expect_res = ERR, result_res = s21_create_matrix(3, 3, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
 /*
  *
  * =============== TEST CASES: s21_eq_matrix ===============
@@ -124,6 +130,28 @@ START_TEST(tc05_s21_eq_matrix) {
 }
 END_TEST
 
+START_TEST(tc06_s21_eq_matrix) {
+  matrix_t mat = {0};
+
+  int expect_res = FAILURE, result_res = s21_eq_matrix(NULL, &mat);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+START_TEST(tc07_s21_eq_matrix) {
+  matrix_t mat = {0};
+
+  int expect_res = FAILURE, result_res = s21_eq_matrix(&mat, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+START_TEST(tc08_s21_eq_matrix) {
+  int expect_res = FAILURE, result_res = s21_eq_matrix(NULL, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
 /*
  * ***********************************************************
  * ======================= TEST SUITES =======================
@@ -138,6 +166,7 @@ Suite *ts_s21_create_matrix() {
   tcase_add_test(test_case, tc02_s21_create_matrix);
   tcase_add_test(test_case, tc03_s21_create_matrix);
   tcase_add_test(test_case, tc04_s21_create_matrix);
+  tcase_add_test(test_case, tc05_s21_create_matrix);
 
   suite_add_tcase(suite, test_case);
 
@@ -153,6 +182,9 @@ Suite *ts_s21_eq_matrix() {
   tcase_add_test(test_case, tc03_s21_eq_matrix);
   tcase_add_test(test_case, tc04_s21_eq_matrix);
   tcase_add_test(test_case, tc05_s21_eq_matrix);
+  tcase_add_test(test_case, tc06_s21_eq_matrix);
+  tcase_add_test(test_case, tc07_s21_eq_matrix);
+  tcase_add_test(test_case, tc08_s21_eq_matrix);
 
   suite_add_tcase(suite, test_case);
 
