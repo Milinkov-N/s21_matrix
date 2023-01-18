@@ -33,6 +33,21 @@ void s21_remove_matrix(matrix_t *A) {
   }
 }
 
+int s21_eq_matrix(matrix_t *A, matrix_t *B) {
+  int res = FAILURE;
+
+  if (eq_matrix_dim(A, B)) {
+    res = SUCCESS;
+    for (int i = 0; res && i < A->rows; i++)
+      for (int j = 0; res && j < A->columns; j++)
+        if (A->matrix[i] == NULL || B->matrix[i] == NULL ||
+            fabs(A->matrix[i][j] - B->matrix[i][j]) >= 1e-7)
+          res = FAILURE;
+  }
+
+  return res;
+}
+
 /*
  *
  * =============== UTILITY FUNCTIONS ===============
@@ -46,6 +61,19 @@ void print_matrix(matrix_t *A) {
       printf("\n");
     }
   }
+}
+
+int eq_matrix_dim(matrix_t *A, matrix_t *B) {
+  int res = FAILURE;
+
+  if (is_init(A) && is_init(B))
+    if (A->rows == B->rows && A->columns == B->columns) res = SUCCESS;
+
+  return res;
+}
+
+int is_init(matrix_t *A) {
+  return A != NULL && A->matrix != NULL && A->rows > 0 && A->columns > 0;
 }
 
 void free_2d_array(double **arr, int height) {

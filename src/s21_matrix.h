@@ -12,13 +12,14 @@
 #define SUCCESS 1
 #define FAILURE 0
 
-#define CREATE_MATRIX(_ROWS_, _COLUMNS_, _NAME_, ...)   \
-  double _NAME_##init[_ROWS_][_COLUMNS_] = __VA_ARGS__; \
-  matrix_t _NAME_ = {0};                                \
-  s21_create_matrix(_ROWS_, _COLUMNS_, &_NAME_);        \
-  for (int i = 0; i < _NAME_.rows; i++)                 \
-    for (int j = 0; j < _NAME_.columns; j++)            \
-      _NAME_.matrix[i][j] = _NAME_##init[i][j];
+#define CREATE_MATRIX(_NAME_, _ROWS_, _COLUMNS_, ...)                   \
+  double __##_NAME_##_init_array[_ROWS_][_COLUMNS_] = __VA_ARGS__;      \
+  matrix_t _NAME_ = {0};                                                \
+  int __##_NAME_##_res = s21_create_matrix(_ROWS_, _COLUMNS_, &_NAME_); \
+  if (__##_NAME_##_res != ERR)                                          \
+    for (int i = 0; i < _NAME_.rows; i++)                               \
+      for (int j = 0; j < _NAME_.columns; j++)                          \
+        _NAME_.matrix[i][j] = __##_NAME_##_init_array[i][j];
 
 typedef struct matrix_struct {
   double **matrix;
