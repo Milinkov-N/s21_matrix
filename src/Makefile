@@ -29,7 +29,7 @@ gcov_report: test
 	open ./report/index.html
 
 valgrind:
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBSOURCES) tests_valgrind.c -o vtests_run
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC) tests_valgrind.c -o vtests_run
 	sh valgrind.sh ./vtests_run
 
 docker_test:

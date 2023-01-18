@@ -52,26 +52,26 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result);
  * =============== UTILITY FUNCTIONS ===============
  */
 
-int s21_matrix_arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
-                             void (*cb)(double *, double *, double *));
+int matrix_arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
+                         void (*cb)(double *, double *, double *));
 
 void arith_sum(double *lhs, double *rhs, double *res);
 
 void arith_sub(double *lhs, double *rhs, double *res);
 
-int s21_eq_matrix_dim(matrix_t *A, matrix_t *B);
+int eq_matrix_dim(matrix_t *A, matrix_t *B);
 
-int s21_submatrix_of(int row, int column, matrix_t *A, matrix_t *result);
+int submatrix_of(int row, int column, matrix_t *A, matrix_t *result);
 
-int s21_determinant_inner(matrix_t *A, double *result);
+int determinant_inner(matrix_t *A, double *result);
 
-int s21_calc_minor_matrix(matrix_t *A, double *result);
+int calc_minor_matrix(matrix_t *A, double *result);
 
-void s21_fill_matrix_indices(matrix_t *A);
+void fill_matrix_indices(matrix_t *A);
 
-void s21_fill_matrix_triangular(matrix_t *A);
+void fill_matrix_triangular(matrix_t *A);
 
-void s21_print_matrix(matrix_t *A);
+void print_matrix(matrix_t *A);
 
 int is_init(matrix_t *A);
 
