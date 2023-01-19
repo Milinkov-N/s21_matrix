@@ -801,6 +801,64 @@ void tc_determinant() {
   }
 }
 
+void tc_calc_complements() {
+  {
+    matrix_t res_mat = {0};
+    CREATE_MATRIX(mat1, 3, 3, {{1, 2, 3}, {0, 4, 2}, {5, 2, 1}});
+    CREATE_MATRIX(exp_mat, 3, 3, {{0, 10, -20}, {4, -14, 8}, {-8, -2, 4}});
+
+    s21_calc_complements(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    matrix_t res_mat = {0};
+    CREATE_MATRIX(mat1, 2, 2, {{1, 2}, {4, 6}});
+    CREATE_MATRIX(exp_mat, 2, 2, {{6, -4}, {-2, 1}});
+
+    s21_calc_complements(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    matrix_t res_mat = {0};
+    CREATE_MATRIX(mat1, 1, 1, {{1}});
+    s21_calc_complements(&mat1, &res_mat);
+    s21_remove_matrix(&mat1);
+  }
+
+  {
+    matrix_t res_mat = {0};
+    CREATE_MATRIX(
+        mat1, 4, 4,
+        {{1, 2, 0, 3}, {4, 6, -2, 17}, {-5, 0, 0, -4}, {0, 0, 12, -14}});
+    CREATE_MATRIX(exp_mat, 4, 4,
+                  {{288, 688, -420, -360},
+                   {-96, -132, 140, 120},
+                   {-136, 32, 28, 24},
+                   {-16, -22, 72, 20}});
+
+    s21_calc_complements(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    matrix_t mat1 = {0}, res_mat = {0};
+    s21_calc_complements(&mat1, &res_mat);
+  }
+
+  { s21_calc_complements(NULL, NULL); }
+}
+
 int main(void) {
   tc_create_matrix();
   tc_eq_matrix();
@@ -810,5 +868,6 @@ int main(void) {
   tc_mult_matrix();
   tc_transpose();
   tc_determinant();
+  tc_calc_complements();
   return 0;
 }

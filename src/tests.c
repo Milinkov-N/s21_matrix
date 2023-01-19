@@ -1054,6 +1054,94 @@ END_TEST
 
 /*
  *
+ * =============== TEST CASES: s21_calc_complements ===============
+ *
+ */
+
+START_TEST(tc01_s21_calc_complements) {
+  matrix_t res_mat = {0};
+  CREATE_MATRIX(mat1, 3, 3, {{1, 2, 3}, {0, 4, 2}, {5, 2, 1}});
+  CREATE_MATRIX(exp_mat, 3, 3, {{0, 10, -20}, {4, -14, 8}, {-8, -2, 4}});
+
+  int expected = OK, result = s21_calc_complements(&mat1, &res_mat);
+  ck_assert_int_eq(expected, result);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc02_s21_calc_complements) {
+  matrix_t res_mat = {0};
+  CREATE_MATRIX(mat1, 2, 2, {{1, 2}, {4, 6}});
+  CREATE_MATRIX(exp_mat, 2, 2, {{6, -4}, {-2, 1}});
+
+  int expected = OK, result = s21_calc_complements(&mat1, &res_mat);
+  ck_assert_int_eq(expected, result);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc03_s21_calc_complements) {
+  matrix_t res_mat = {0};
+  CREATE_MATRIX(mat1, 1, 1, {{1}});
+
+  int expected = CALC_ERR, result = s21_calc_complements(&mat1, &res_mat);
+  ck_assert_int_eq(expected, result);
+
+  s21_remove_matrix(&mat1);
+}
+END_TEST
+
+START_TEST(tc04_s21_calc_complements) {
+  matrix_t res_mat = {0};
+  CREATE_MATRIX(
+      mat1, 4, 4,
+      {{1, 2, 0, 3}, {4, 6, -2, 17}, {-5, 0, 0, -4}, {0, 0, 12, -14}});
+  CREATE_MATRIX(exp_mat, 4, 4,
+                {{288, 688, -420, -360},
+                 {-96, -132, 140, 120},
+                 {-136, 32, 28, 24},
+                 {-16, -22, 72, 20}});
+
+  int expected = OK, result = s21_calc_complements(&mat1, &res_mat);
+  ck_assert_int_eq(expected, result);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc05_s21_calc_complements) {
+  matrix_t mat1 = {0}, res_mat = {0};
+
+  int expected = ERR, result = s21_calc_complements(&mat1, &res_mat);
+  ck_assert_int_eq(expected, result);
+}
+END_TEST
+
+START_TEST(tc06_s21_calc_complements) {
+  int expected = ERR, result = s21_calc_complements(NULL, NULL);
+  ck_assert_int_eq(expected, result);
+}
+END_TEST
+
+/*
+ *
  * =============== TEST CASES: s21_determinant ===============
  *
  */
@@ -1288,6 +1376,22 @@ Suite *ts_s21_transpose() {
   return suite;
 }
 
+Suite *ts_s21_calc_complements() {
+  Suite *suite = suite_create("ts_s21_calc_complements");
+  TCase *test_case = tcase_create("tc_s21_calc_complements");
+
+  tcase_add_test(test_case, tc01_s21_calc_complements);
+  tcase_add_test(test_case, tc02_s21_calc_complements);
+  tcase_add_test(test_case, tc03_s21_calc_complements);
+  tcase_add_test(test_case, tc04_s21_calc_complements);
+  tcase_add_test(test_case, tc05_s21_calc_complements);
+  tcase_add_test(test_case, tc06_s21_calc_complements);
+
+  suite_add_tcase(suite, test_case);
+
+  return suite;
+}
+
 Suite *ts_s21_determinant() {
   Suite *suite = suite_create("ts_s21_determinant");
   TCase *test_case = tcase_create("tc_s21_determinant");
@@ -1308,11 +1412,10 @@ Suite *ts_s21_determinant() {
 
 int main(void) {
   Suite *test_suites[] = {ts_s21_create_matrix(), ts_s21_eq_matrix(),
-                          ts_s21_sum_matrix(), ts_s21_sub_matrix(),
-                          ts_s21_mult_number(), ts_s21_mult_matrix(),
-                          ts_s21_transpose(),
-                          // ts_s21_calc_complements(),
-                          ts_s21_determinant(), NULL};
+                          ts_s21_sum_matrix(),    ts_s21_sub_matrix(),
+                          ts_s21_mult_number(),   ts_s21_mult_matrix(),
+                          ts_s21_transpose(),     ts_s21_calc_complements(),
+                          ts_s21_determinant(),   NULL};
   int failed = 0;
 
   for (Suite **s = test_suites; *s != NULL; s++) {

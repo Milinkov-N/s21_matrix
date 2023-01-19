@@ -108,6 +108,33 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
   return res;
 }
 
+int s21_calc_complements(matrix_t *A, matrix_t *result) {
+  int res = ERR;
+
+  if (is_init(A) && result != NULL) {
+    res = CALC_ERR;
+
+    if (A->rows == A->columns && A->rows > 1) {
+      res = s21_create_matrix(A->rows, A->columns, result);
+
+      for (int i = 0; res == OK && i < A->rows; i++) {
+        for (int j = 0; j < A->columns; j++) {
+          matrix_t minor = {0};
+          double dtmt = 0;
+
+          if ((res = submatrix_of(i, j, A, &minor)) == OK) {
+            if ((res = s21_determinant(&minor, &dtmt)) == OK)
+              result->matrix[i][j] = dtmt * pow(-1, i + j);
+            s21_remove_matrix(&minor);
+          }
+        }
+      }
+    }
+  }
+
+  return res;
+}
+
 int s21_determinant(matrix_t *A, double *result) {
   int res = ERR;
 
