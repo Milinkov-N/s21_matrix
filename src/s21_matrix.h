@@ -76,6 +76,8 @@ void print_matrix(matrix_t *A);
 
 int is_init(matrix_t *A);
 
+int is_nan(double x);
+
 void free_2d_array(double **arr, int height);
 
 #endif  // SRC_S21_MATRIX_H_

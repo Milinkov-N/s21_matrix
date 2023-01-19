@@ -62,8 +62,34 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
   if (is_init(A)) {
     res = s21_create_matrix(A->rows, A->columns, result);
     for (int i = 0; res == OK && i < A->rows; i++)
-      for (int j = 0; j < A->columns; j++)
+      for (int j = 0; j < A->columns; j++) {
         result->matrix[i][j] = A->matrix[i][j] * number;
+        if (is_nan(result->matrix[i][j])) res = CALC_ERR;
+      }
+    if (res == CALC_ERR) s21_remove_matrix(result);
+  }
+
+  return res;
+}
+
+int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
+  int res = ERR;
+
+  if (is_init(A) && is_init(B)) {
+    res = CALC_ERR;
+
+    if (A->columns == B->rows) {
+      res = s21_create_matrix(A->rows, B->columns, result);
+
+      for (int i = 0; res == OK && i < A->rows; i++)
+        for (int j = 0; j < B->columns; j++)
+          for (int k = 0; k < B->rows; k++) {
+            result->matrix[i][j] += A->matrix[i][k] * B->matrix[k][j];
+            if (is_nan(result->matrix[i][j])) res = CALC_ERR;
+          }
+
+      if (res == CALC_ERR) s21_remove_matrix(result);
+    }
   }
 
   return res;
@@ -85,8 +111,11 @@ int arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
     if (eq_matrix_dim(A, B)) {
       res = s21_create_matrix(A->rows, A->columns, result);
       for (int i = 0; res == OK && i < A->rows; i++)
-        for (int j = 0; j < A->columns; j++)
+        for (int j = 0; j < A->columns; j++) {
           cb(&A->matrix[i][j], &B->matrix[i][j], &result->matrix[i][j]);
+          if (is_nan(result->matrix[i][j])) res = CALC_ERR;
+        }
+      if (res == CALC_ERR) s21_remove_matrix(result);
     }
   }
 
@@ -109,6 +138,8 @@ int eq_matrix_dim(matrix_t *A, matrix_t *B) {
 int is_init(matrix_t *A) {
   return A != NULL && A->matrix != NULL && A->rows > 0 && A->columns > 0;
 }
+
+int is_nan(double x) { return x != x; }
 
 void print_matrix(matrix_t *A) {
   if (A != NULL) {

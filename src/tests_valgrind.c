@@ -516,11 +516,155 @@ void tc_mult_number() {
   { s21_mult_number(NULL, 2.0032, NULL); }
 }
 
+void tc_mult_matrix() {
+  {
+    CREATE_MATRIX(mat1, 1, 1, {{14}});
+    CREATE_MATRIX(mat2, 1, 1, {{4}});
+    CREATE_MATRIX(exp_mat, 1, 1, {{56}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 2, 2, {{14, 12.456}, {-3, 0}});
+    CREATE_MATRIX(mat2, 2, 2, {{4, -18}, {10, 5}});
+    CREATE_MATRIX(exp_mat, 2, 2, {{180.56, -189.72}, {-12, 54}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 3, {{14, 12.456, -1}, {-3, 0, 13}, {4.04, -80, 6}});
+    CREATE_MATRIX(mat2, 3, 3, {{4, -18, 7.07}, {10, 5, 6}, {20, 0, 420}});
+    CREATE_MATRIX(exp_mat, 3, 3,
+                  {{160.56, -189.72, -246.284},
+                   {248, 54, 5438.79},
+                   {-663.84, -472.72, 2068.5628}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 4, 4,
+                  {{14, 12.456, -1, 5},
+                   {-3, 0, 13, -10},
+                   {4.04, -80, 6, 56},
+                   {0.001, -2.5, 3.6, 0.7983}});
+    CREATE_MATRIX(mat2, 4, 4,
+                  {{4, -18, 7.07, 1},
+                   {10, 5, 6, 2},
+                   {20, 0, 420, 1},
+                   {0, 30, 7.78, -12}});
+    CREATE_MATRIX(exp_mat, 4, 4,
+                  {{160.56, -39.72, -207.384, -22.088},
+                   {248, -246, 5360.99, 130},
+                   {-663.84, 1207.28, 2504.2428, -821.96},
+                   {47.004, 11.431, 1503.217844, -10.9786}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 2, 4, {{14, 12.456, -1, 5}, {-3, 0, 13, -10}});
+    CREATE_MATRIX(mat2, 4, 2, {{4, -18}, {10, 5}, {20, 0}, {0, 30}});
+    CREATE_MATRIX(exp_mat, 2, 2, {{160.56, -39.72}, {248, -246}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 1, {{14}, {-3}, {4.04}});
+    CREATE_MATRIX(mat2, 1, 3, {{4, -18, 7.07}});
+    CREATE_MATRIX(
+        exp_mat, 3, 3,
+        {{56, -252, 98.98}, {-12, 54, -21.21}, {16.16, -72.72, 28.5628}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 1, {{14}, {-3}, {4.04}});
+    CREATE_MATRIX(mat2, 1, 3, {{4, 0.0 / 0.0, 7.07}});
+
+    matrix_t res_mat = {0};
+
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 1, {{14}, {-3}, {4.04}});
+    CREATE_MATRIX(mat2, 1, 3, {{4, 0, 7.07}});
+
+    s21_mult_matrix(&mat1, &mat2, NULL);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&mat2);
+  }
+
+  {
+    matrix_t mat1 = {0}, mat2 = {0}, res_mat = {0};
+    s21_mult_matrix(&mat1, &mat2, &res_mat);
+  }
+
+  {
+    matrix_t res_mat = {0};
+    s21_mult_matrix(NULL, NULL, &res_mat);
+  }
+
+  { s21_mult_matrix(NULL, NULL, NULL); }
+}
+
 int main(void) {
   tc_create_matrix();
   tc_eq_matrix();
   tc_sum_matrix();
   tc_sub_matrix();
   tc_mult_number();
+  tc_mult_matrix();
   return 0;
 }
