@@ -53,8 +53,8 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result);
  * =============== UTILITY FUNCTIONS ===============
  */
 
-int matrix_arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
-                         void (*cb)(double *, double *, double *));
+int arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
+                  void (*cb)(double *, double *, double *));
 
 void arith_sum(double *lhs, double *rhs, double *res);
 

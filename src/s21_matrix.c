@@ -48,20 +48,41 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
   return res;
 }
 
+int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
+  return arith_wrapper(A, B, result, arith_sum);
+}
+
+int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
+  return arith_wrapper(A, B, result, arith_sub);
+}
+
 /*
  *
  * =============== UTILITY FUNCTIONS ===============
  *
  */
 
-void print_matrix(matrix_t *A) {
-  if (A != NULL) {
-    for (int i = 0; i < A->rows; i++) {
-      for (int j = 0; j < A->columns; j++) printf("%lf ", A->matrix[i][j]);
-      printf("\n");
+int arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
+                  void (*cb)(double *, double *, double *)) {
+  int res = ERR;
+
+  if (is_init(A) && is_init(B)) {
+    res = CALC_ERR;
+
+    if (eq_matrix_dim(A, B)) {
+      res = s21_create_matrix(A->rows, A->columns, result);
+      for (int i = 0; res == OK && i < A->rows; i++)
+        for (int j = 0; j < A->columns; j++)
+          cb(&A->matrix[i][j], &B->matrix[i][j], &result->matrix[i][j]);
     }
   }
+
+  return res;
 }
+
+void arith_sum(double *lhs, double *rhs, double *res) { *res = *lhs + *rhs; }
+
+void arith_sub(double *lhs, double *rhs, double *res) { *res = *lhs - *rhs; }
 
 int eq_matrix_dim(matrix_t *A, matrix_t *B) {
   int res = FAILURE;
@@ -74,6 +95,15 @@ int eq_matrix_dim(matrix_t *A, matrix_t *B) {
 
 int is_init(matrix_t *A) {
   return A != NULL && A->matrix != NULL && A->rows > 0 && A->columns > 0;
+}
+
+void print_matrix(matrix_t *A) {
+  if (A != NULL) {
+    for (int i = 0; i < A->rows; i++) {
+      for (int j = 0; j < A->columns; j++) printf("%lf ", A->matrix[i][j]);
+      printf("\n");
+    }
+  }
 }
 
 void free_2d_array(double **arr, int height) {
