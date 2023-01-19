@@ -153,6 +153,30 @@ int s21_determinant(matrix_t *A, double *result) {
   return res;
 }
 
+int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
+  int res = ERR;
+
+  if (is_init(A) && result != NULL) {
+    double dtmt = 0;
+    res = s21_determinant(A, &dtmt);
+
+    if (res == OK && dtmt == 0) res = CALC_ERR;
+
+    if (res == OK && A->rows == 1) {
+      res = s21_mult_number(A, 1 / A->matrix[0][0] / A->matrix[0][0], result);
+    } else if (res == OK) {
+      matrix_t alg_comp = {0};
+
+      if ((res = s21_calc_complements(A, &alg_comp)) == OK) {
+        res = s21_transpose(&alg_comp, result);
+        s21_remove_matrix(&alg_comp);
+      }
+    }
+  }
+
+  return res;
+}
+
 /*
  *
  * =============== UTILITY FUNCTIONS ===============
@@ -248,15 +272,6 @@ int is_init(matrix_t *A) {
 }
 
 int is_nan(double x) { return x != x; }
-
-void print_matrix(matrix_t *A) {
-  if (A != NULL) {
-    for (int i = 0; i < A->rows; i++) {
-      for (int j = 0; j < A->columns; j++) printf("%lf ", A->matrix[i][j]);
-      printf("\n");
-    }
-  }
-}
 
 void free_2d_array(double **arr, int height) {
   if (arr != NULL) {

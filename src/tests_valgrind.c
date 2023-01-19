@@ -859,6 +859,96 @@ void tc_calc_complements() {
   { s21_calc_complements(NULL, NULL); }
 }
 
+void tc_inverse_matrix() {
+  {
+    CREATE_MATRIX(mat, 1, 1, {{5}});
+    CREATE_MATRIX(exp_mat, 1, 1, {{0.2}});
+    matrix_t res_mat = {0};
+
+    s21_inverse_matrix(&mat, &res_mat);
+
+    s21_remove_matrix(&mat);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 2, 2, {{5, 2}, {0, -3}});
+    CREATE_MATRIX(exp_mat, 2, 2, {{-3, -2}, {0, 5}});
+    matrix_t res_mat = {0};
+
+    s21_inverse_matrix(&mat, &res_mat);
+
+    s21_remove_matrix(&mat);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 3, 3, {{2, 5, 7}, {6, 3, 4}, {5, -2, -3}});
+    CREATE_MATRIX(exp_mat, 3, 3, {{-1, 1, -1}, {38, -41, 34}, {-27, 29, -24}});
+    matrix_t res_mat = {0};
+
+    s21_inverse_matrix(&mat, &res_mat);
+
+    s21_remove_matrix(&mat);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 4, 4,
+                  {{2.14, -5, 0.7, 11},
+                   {16, 3.01, 0, 7},
+                   {5.55, -2.5, -3.33, 0},
+                   {10, -10, 0, -1.0156}});
+    CREATE_MATRIX(exp_mat, 4, 4,
+                  {{-222.92033652, 384.98704, -46.8601308, 239.0563},
+                   {-287.211168, 377.48297472, -60.37472, -509.0016},
+                   {-155.9098942, 358.24944, -2379.08988584, 780.5605},
+                   {633.033, 73.888, 133.07, -327.543712}});
+
+    matrix_t res_mat = {0};
+
+    s21_inverse_matrix(&mat, &res_mat);
+
+    s21_remove_matrix(&mat);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(
+        mat, 3, 4,
+        {{2.14, -5, 0.7, 11}, {16, 3.01, 0, 7}, {5.55, -2.5, -3.33, 0}});
+    matrix_t res_mat = {0};
+    s21_inverse_matrix(&mat, &res_mat);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 4, 4,
+                  {{2.14, -5, 0.7, 11},
+                   {16, 3.01, 0, 7},
+                   {5.55, -2.5, -3.33, 0},
+                   {10, -10, 0, -1.0156}});
+    s21_inverse_matrix(&mat, NULL);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    matrix_t res_mat = {0};
+    s21_inverse_matrix(NULL, &res_mat);
+  }
+
+  { s21_inverse_matrix(NULL, NULL); }
+
+  {
+    matrix_t mat = {0}, res_mat = {0};
+    s21_inverse_matrix(&mat, &res_mat);
+  }
+}
+
 int main(void) {
   tc_create_matrix();
   tc_eq_matrix();
@@ -869,5 +959,6 @@ int main(void) {
   tc_transpose();
   tc_determinant();
   tc_calc_complements();
+  tc_inverse_matrix();
   return 0;
 }

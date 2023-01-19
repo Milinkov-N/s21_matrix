@@ -1,5 +1,4 @@
 #include <check.h>
-#include <stdio.h>
 
 #include "s21_matrix.h"
 
@@ -1236,6 +1235,139 @@ START_TEST(tc08_s21_determinant) {
 END_TEST
 
 /*
+ *
+ * =============== TEST CASES: s21_inverse_matrix ===============
+ *
+ */
+
+START_TEST(tc01_s21_inverse_matrix) {
+  CREATE_MATRIX(mat, 1, 1, {{5}});
+  CREATE_MATRIX(exp_mat, 1, 1, {{0.2}});
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_inverse_matrix(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc02_s21_inverse_matrix) {
+  CREATE_MATRIX(mat, 2, 2, {{5, 2}, {0, -3}});
+  CREATE_MATRIX(exp_mat, 2, 2, {{-3, -2}, {0, 5}});
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_inverse_matrix(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc03_s21_inverse_matrix) {
+  CREATE_MATRIX(mat, 3, 3, {{2, 5, 7}, {6, 3, 4}, {5, -2, -3}});
+  CREATE_MATRIX(exp_mat, 3, 3, {{-1, 1, -1}, {38, -41, 34}, {-27, 29, -24}});
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_inverse_matrix(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc04_s21_inverse_matrix) {
+  CREATE_MATRIX(mat, 4, 4,
+                {{2.14, -5, 0.7, 11},
+                 {16, 3.01, 0, 7},
+                 {5.55, -2.5, -3.33, 0},
+                 {10, -10, 0, -1.0156}});
+  CREATE_MATRIX(exp_mat, 4, 4,
+                {{-222.92033652, 384.98704, -46.8601308, 239.0563},
+                 {-287.211168, 377.48297472, -60.37472, -509.0016},
+                 {-155.9098942, 358.24944, -2379.08988584, 780.5605},
+                 {633.033, 73.888, 133.07, -327.543712}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_inverse_matrix(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expected_eq = SUCCESS, result_eq = s21_eq_matrix(&res_mat, &exp_mat);
+  ck_assert_int_eq(expected_eq, result_eq);
+
+  s21_remove_matrix(&mat);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc05_s21_inverse_matrix) {
+  CREATE_MATRIX(
+      mat, 3, 4,
+      {{2.14, -5, 0.7, 11}, {16, 3.01, 0, 7}, {5.55, -2.5, -3.33, 0}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = CALC_ERR, result_res = s21_inverse_matrix(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  s21_remove_matrix(&mat);
+}
+END_TEST
+
+START_TEST(tc06_s21_inverse_matrix) {
+  CREATE_MATRIX(mat, 4, 4,
+                {{2.14, -5, 0.7, 11},
+                 {16, 3.01, 0, 7},
+                 {5.55, -2.5, -3.33, 0},
+                 {10, -10, 0, -1.0156}});
+
+  int expect_res = ERR, result_res = s21_inverse_matrix(&mat, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+
+  s21_remove_matrix(&mat);
+}
+END_TEST
+
+START_TEST(tc07_s21_inverse_matrix) {
+  matrix_t res_mat = {0};
+
+  int expect_res = ERR, result_res = s21_inverse_matrix(NULL, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+START_TEST(tc08_s21_inverse_matrix) {
+  int expect_res = ERR, result_res = s21_inverse_matrix(NULL, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+START_TEST(tc09_s21_inverse_matrix) {
+  matrix_t mat = {0}, res_mat = {0};
+
+  int expect_res = ERR, result_res = s21_inverse_matrix(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+/*
  * ***********************************************************
  * ======================= TEST SUITES =======================
  * ***********************************************************
@@ -1410,12 +1542,37 @@ Suite *ts_s21_determinant() {
   return suite;
 }
 
+Suite *ts_s21_inverse_matrix() {
+  Suite *suite = suite_create("ts_s21_inverse_matrix");
+  TCase *test_case = tcase_create("tc_s21_inverse_matrix");
+
+  tcase_add_test(test_case, tc01_s21_inverse_matrix);
+  tcase_add_test(test_case, tc02_s21_inverse_matrix);
+  tcase_add_test(test_case, tc03_s21_inverse_matrix);
+  tcase_add_test(test_case, tc04_s21_inverse_matrix);
+  tcase_add_test(test_case, tc05_s21_inverse_matrix);
+  tcase_add_test(test_case, tc06_s21_inverse_matrix);
+  tcase_add_test(test_case, tc07_s21_inverse_matrix);
+  tcase_add_test(test_case, tc08_s21_inverse_matrix);
+  tcase_add_test(test_case, tc09_s21_inverse_matrix);
+
+  suite_add_tcase(suite, test_case);
+
+  return suite;
+}
+
 int main(void) {
-  Suite *test_suites[] = {ts_s21_create_matrix(), ts_s21_eq_matrix(),
-                          ts_s21_sum_matrix(),    ts_s21_sub_matrix(),
-                          ts_s21_mult_number(),   ts_s21_mult_matrix(),
-                          ts_s21_transpose(),     ts_s21_calc_complements(),
-                          ts_s21_determinant(),   NULL};
+  Suite *test_suites[] = {ts_s21_create_matrix(),
+                          ts_s21_eq_matrix(),
+                          ts_s21_sum_matrix(),
+                          ts_s21_sub_matrix(),
+                          ts_s21_mult_number(),
+                          ts_s21_mult_matrix(),
+                          ts_s21_transpose(),
+                          ts_s21_calc_complements(),
+                          ts_s21_determinant(),
+                          ts_s21_inverse_matrix(),
+                          NULL};
   int failed = 0;
 
   for (Suite **s = test_suites; *s != NULL; s++) {

@@ -2,7 +2,6 @@
 #define SRC_S21_MATRIX_H_
 
 #include <math.h>
-#include <stdio.h>  // to delete
 #include <stdlib.h>
 
 #define OK 0
@@ -67,8 +66,6 @@ int submatrix_of(int row, int column, matrix_t *A, matrix_t *result);
 int eq_matrix_dim(matrix_t *A, matrix_t *B);
 
 int calc_minor_matrix(matrix_t *A, double *result);
-
-void print_matrix(matrix_t *A);
 
 int is_init(matrix_t *A);
 
