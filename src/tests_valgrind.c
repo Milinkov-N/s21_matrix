@@ -744,6 +744,63 @@ void tc_transpose() {
   { s21_transpose(NULL, NULL); }
 }
 
+void tc_determinant() {
+  {
+    CREATE_MATRIX(mat, 1, 1, {{14}});
+    double res_val = 0;
+    s21_determinant(&mat, &res_val);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 2, 2, {{4, 1}, {0, 9}});
+    double res_val = 0;
+    s21_determinant(&mat, &res_val);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 3, 3, {{4, 1, 2.5}, {0, 9, 7.1}, {0.001, 0, 0}});
+    double res_val = 0;
+    s21_determinant(&mat, &res_val);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 4, 4,
+                  {{4, 1, 2.5, 3},
+                   {0, 9, 7.1, -2},
+                   {0.001, 0, 0, 5},
+                   {0, 25.568, 30, -40.95}});
+    double res_val = 0;
+    s21_determinant(&mat, &res_val);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    CREATE_MATRIX(mat, 4, 4,
+                  {{4, 1, 2.5, 3},
+                   {0, 9, 7.1, -2},
+                   {0.001, 0, 0, 5},
+                   {0, 25.568, 30, -40.95}});
+    s21_determinant(&mat, NULL);
+    s21_remove_matrix(&mat);
+  }
+
+  {
+    double res_val = 0;
+    s21_determinant(NULL, &res_val);
+  }
+
+  { s21_determinant(NULL, NULL); }
+
+  {
+    matrix_t mat = {0};
+    double res_val = 0;
+    s21_determinant(&mat, &res_val);
+  }
+}
+
 int main(void) {
   tc_create_matrix();
   tc_eq_matrix();
@@ -752,5 +809,6 @@ int main(void) {
   tc_mult_number();
   tc_mult_matrix();
   tc_transpose();
+  tc_determinant();
   return 0;
 }

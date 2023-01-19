@@ -60,17 +60,13 @@ void arith_sum(double *lhs, double *rhs, double *res);
 
 void arith_sub(double *lhs, double *rhs, double *res);
 
-int eq_matrix_dim(matrix_t *A, matrix_t *B);
+int determinant_inner(matrix_t *A, double *result);
 
 int submatrix_of(int row, int column, matrix_t *A, matrix_t *result);
 
-int determinant_inner(matrix_t *A, double *result);
+int eq_matrix_dim(matrix_t *A, matrix_t *B);
 
 int calc_minor_matrix(matrix_t *A, double *result);
-
-void fill_matrix_indices(matrix_t *A);
-
-void fill_matrix_triangular(matrix_t *A);
 
 void print_matrix(matrix_t *A);
 

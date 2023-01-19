@@ -108,6 +108,24 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
   return res;
 }
 
+int s21_determinant(matrix_t *A, double *result) {
+  int res = ERR;
+
+  if (is_init(A) && result != NULL) {
+    res = CALC_ERR;
+
+    if (A->rows == A->columns) {
+      res = OK;
+      if (A->rows == 1)
+        *result = A->matrix[0][0];
+      else
+        res = determinant_inner(A, result);
+    }
+  }
+
+  return res;
+}
+
 /*
  *
  * =============== UTILITY FUNCTIONS ===============
@@ -138,6 +156,56 @@ int arith_wrapper(matrix_t *A, matrix_t *B, matrix_t *result,
 void arith_sum(double *lhs, double *rhs, double *res) { *res = *lhs + *rhs; }
 
 void arith_sub(double *lhs, double *rhs, double *res) { *res = *lhs - *rhs; }
+
+int determinant_inner(matrix_t *A, double *result) {
+  int res = OK;
+
+  if (A->rows == 2) {
+    *result =
+        A->matrix[0][0] * A->matrix[1][1] - A->matrix[0][1] * A->matrix[1][0];
+  } else {
+    for (int i = 0; i < A->rows; i++) {
+      matrix_t minor = {0};
+
+      if ((res = submatrix_of(0, i, A, &minor)) == OK) {
+        double temp = 0;
+
+        if ((res = determinant_inner(&minor, &temp)) == OK)
+          *result += pow(-1, i) * A->matrix[0][i] * temp;
+
+        s21_remove_matrix(&minor);
+      }
+    }
+  }
+
+  return res;
+}
+
+int submatrix_of(int row, int column, matrix_t *A, matrix_t *result) {
+  int res = ERR;
+
+  if (is_init(A) && result != NULL) {
+    res = s21_create_matrix(A->rows - 1, A->columns - 1, result);
+
+    if (res == OK) {
+      int idx = 0, jdx = 0;
+      for (int i = 0; i < A->rows; i++) {
+        if (i == row) continue;
+
+        for (int j = 0; j < A->columns; j++) {
+          if (j == column) continue;
+
+          result->matrix[idx][jdx++] = A->matrix[i][j];
+        }
+
+        idx++;
+        jdx = 0;
+      }
+    }
+  }
+
+  return res;
+}
 
 int eq_matrix_dim(matrix_t *A, matrix_t *B) {
   int res = FAILURE;
