@@ -11,7 +11,7 @@ else
 	CKFLAGS=-lcheck -lm -lpthread
 endif
 
-all: s21_matrix.a gcov_report
+all: gcov_report s21_matrix.a
 
 s21_matrix.a: $(OBJ)
 	ar -crs s21_matrix.a $(OBJ)
