@@ -921,6 +921,138 @@ START_TEST(tc11_s21_mult_matrix) {
 END_TEST
 
 /*
+ *
+ * =============== TEST CASES: s21_transpose ===============
+ *
+ */
+
+START_TEST(tc01_s21_transpose) {
+  CREATE_MATRIX(mat1, 1, 1, {{14}});
+  CREATE_MATRIX(exp_mat, 1, 1, {{14}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_transpose(&mat1, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expect_mat_eq = SUCCESS,
+      result_mat_eq = s21_eq_matrix(&exp_mat, &res_mat);
+  ck_assert_int_eq(expect_mat_eq, result_mat_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc02_s21_transpose) {
+  CREATE_MATRIX(mat1, 2, 2, {{14, 15}, {-1, 0}});
+  CREATE_MATRIX(exp_mat, 2, 2, {{14, -1}, {15, 0}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_transpose(&mat1, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expect_mat_eq = SUCCESS,
+      result_mat_eq = s21_eq_matrix(&exp_mat, &res_mat);
+  ck_assert_int_eq(expect_mat_eq, result_mat_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc03_s21_transpose) {
+  CREATE_MATRIX(mat1, 3, 3, {{14, 15, -2}, {0, 50, 3}, {17, -0.001, 6}});
+  CREATE_MATRIX(exp_mat, 3, 3, {{14, 0, 17}, {15, 50, -0.001}, {-2, 3, 6}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_transpose(&mat1, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expect_mat_eq = SUCCESS,
+      result_mat_eq = s21_eq_matrix(&exp_mat, &res_mat);
+  ck_assert_int_eq(expect_mat_eq, result_mat_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc04_s21_transpose) {
+  CREATE_MATRIX(mat1, 2, 4, {{14, 15, -2, 90}, {0, 50, 3, 10}});
+  CREATE_MATRIX(exp_mat, 4, 2, {{14, 0}, {15, 50}, {-2, 3}, {90, 10}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_transpose(&mat1, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expect_mat_eq = SUCCESS,
+      result_mat_eq = s21_eq_matrix(&exp_mat, &res_mat);
+  ck_assert_int_eq(expect_mat_eq, result_mat_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc05_s21_transpose) {
+  CREATE_MATRIX(mat1, 3, 1, {{14}, {3}, {0}});
+  CREATE_MATRIX(exp_mat, 1, 3, {{14, 3, 0}});
+
+  matrix_t res_mat = {0};
+
+  int expect_res = OK, result_res = s21_transpose(&mat1, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+
+  int expect_mat_eq = SUCCESS,
+      result_mat_eq = s21_eq_matrix(&exp_mat, &res_mat);
+  ck_assert_int_eq(expect_mat_eq, result_mat_eq);
+
+  s21_remove_matrix(&mat1);
+  s21_remove_matrix(&exp_mat);
+  s21_remove_matrix(&res_mat);
+}
+END_TEST
+
+START_TEST(tc06_s21_transpose) {
+  matrix_t mat = {0}, res_mat = {0};
+  int expect_res = ERR, result_res = s21_transpose(&mat, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+START_TEST(tc07_s21_transpose) {
+  CREATE_MATRIX(mat1, 3, 1, {{14}, {3}, {0}});
+
+  int expect_res = ERR, result_res = s21_transpose(&mat1, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+
+  s21_remove_matrix(&mat1);
+}
+END_TEST
+
+START_TEST(tc08_s21_transpose) {
+  matrix_t res_mat = {0};
+
+  int expect_res = ERR, result_res = s21_transpose(NULL, &res_mat);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+START_TEST(tc09_s21_transpose) {
+  int expect_res = ERR, result_res = s21_transpose(NULL, NULL);
+  ck_assert_int_eq(expect_res, result_res);
+}
+END_TEST
+
+/*
  * ***********************************************************
  * ======================= TEST SUITES =======================
  * ***********************************************************
@@ -1042,11 +1174,30 @@ Suite *ts_s21_mult_matrix() {
   return suite;
 }
 
+Suite *ts_s21_transpose() {
+  Suite *suite = suite_create("ts_s21_transpose");
+  TCase *test_case = tcase_create("tc_s21_transpose");
+
+  tcase_add_test(test_case, tc01_s21_transpose);
+  tcase_add_test(test_case, tc02_s21_transpose);
+  tcase_add_test(test_case, tc03_s21_transpose);
+  tcase_add_test(test_case, tc04_s21_transpose);
+  tcase_add_test(test_case, tc05_s21_transpose);
+  tcase_add_test(test_case, tc06_s21_transpose);
+  tcase_add_test(test_case, tc07_s21_transpose);
+  tcase_add_test(test_case, tc08_s21_transpose);
+  tcase_add_test(test_case, tc09_s21_transpose);
+
+  suite_add_tcase(suite, test_case);
+
+  return suite;
+}
+
 int main(void) {
   Suite *test_suites[] = {ts_s21_create_matrix(), ts_s21_eq_matrix(),
                           ts_s21_sum_matrix(), ts_s21_sub_matrix(),
                           ts_s21_mult_number(), ts_s21_mult_matrix(),
-                          // ts_s21_transpose(),
+                          ts_s21_transpose(),
                           // ts_s21_calc_complements(),
                           NULL};
   int failed = 0;

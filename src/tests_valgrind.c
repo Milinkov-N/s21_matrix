@@ -659,6 +659,91 @@ void tc_mult_matrix() {
   { s21_mult_matrix(NULL, NULL, NULL); }
 }
 
+void tc_transpose() {
+  {
+    CREATE_MATRIX(mat1, 1, 1, {{14}});
+    CREATE_MATRIX(exp_mat, 1, 1, {{14}});
+
+    matrix_t res_mat = {0};
+
+    s21_transpose(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 2, 2, {{14, 15}, {-1, 0}});
+    CREATE_MATRIX(exp_mat, 2, 2, {{14, -1}, {15, 0}});
+
+    matrix_t res_mat = {0};
+
+    s21_transpose(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 3, {{14, 15, -2}, {0, 50, 3}, {17, -0.001, 6}});
+    CREATE_MATRIX(exp_mat, 3, 3, {{14, 0, 17}, {15, 50, -0.001}, {-2, 3, 6}});
+
+    matrix_t res_mat = {0};
+
+    s21_transpose(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 2, 4, {{14, 15, -2, 90}, {0, 50, 3, 10}});
+    CREATE_MATRIX(exp_mat, 4, 2, {{14, 0}, {15, 50}, {-2, 3}, {90, 10}});
+
+    matrix_t res_mat = {0};
+
+    s21_transpose(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 1, {{14}, {3}, {0}});
+    CREATE_MATRIX(exp_mat, 1, 3, {{14, 3, 0}});
+
+    matrix_t res_mat = {0};
+
+    s21_transpose(&mat1, &res_mat);
+
+    s21_remove_matrix(&mat1);
+    s21_remove_matrix(&exp_mat);
+    s21_remove_matrix(&res_mat);
+  }
+
+  {
+    matrix_t mat = {0}, res_mat = {0};
+    s21_transpose(&mat, &res_mat);
+  }
+
+  {
+    CREATE_MATRIX(mat1, 3, 1, {{14}, {3}, {0}});
+    s21_transpose(&mat1, NULL);
+    s21_remove_matrix(&mat1);
+  }
+
+  {
+    matrix_t res_mat = {0};
+    s21_transpose(NULL, &res_mat);
+  }
+
+  { s21_transpose(NULL, NULL); }
+}
+
 int main(void) {
   tc_create_matrix();
   tc_eq_matrix();
@@ -666,5 +751,6 @@ int main(void) {
   tc_sub_matrix();
   tc_mult_number();
   tc_mult_matrix();
+  tc_transpose();
   return 0;
 }
