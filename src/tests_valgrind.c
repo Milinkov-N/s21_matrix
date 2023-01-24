@@ -22,7 +22,7 @@ void tc_create_matrix() {
   {
     matrix_t mat;
     s21_create_matrix(-4, -4, &mat);
-    s21_remove_matrix(&mat);
+    // s21_remove_matrix(&mat);
   }
 
   { s21_create_matrix(-4, -4, NULL); }

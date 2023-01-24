@@ -16,10 +16,7 @@ all: gcov_report s21_matrix.a
 s21_matrix.a: $(OBJ)
 	ar -crs s21_matrix.a $(OBJ)
 
-playground: s21_matrix.a
-	$(CC) $(CFLAGS) $(LDFLAGS) main.c s21_matrix.a -o pg
-
-test: clean tests.c s21_matrix.a
+test: clean s21_matrix.a
 	$(CC) $(CFLAGS) tests.c $(SRC) -o run $(CKFLAGS) -lgcov --coverage
 	./run
 

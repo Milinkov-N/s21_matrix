@@ -139,6 +139,7 @@ int s21_determinant(matrix_t *A, double *result) {
   int res = ERR;
 
   if (is_init(A) && result != NULL) {
+    *result = 0;
     res = CALC_ERR;
 
     if (A->rows == A->columns) {
@@ -165,10 +166,13 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
     if (res == OK && A->rows == 1) {
       res = s21_mult_number(A, 1 / A->matrix[0][0] / A->matrix[0][0], result);
     } else if (res == OK) {
-      matrix_t alg_comp = {0};
+      matrix_t alg_comp = {0}, transposed = {0};
 
       if ((res = s21_calc_complements(A, &alg_comp)) == OK) {
-        res = s21_transpose(&alg_comp, result);
+        if ((res = s21_transpose(&alg_comp, &transposed)) == OK) {
+          res = s21_mult_number(&transposed, 1 / dtmt, result);
+          s21_remove_matrix(&transposed);
+        }
         s21_remove_matrix(&alg_comp);
       }
     }

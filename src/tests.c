@@ -1259,7 +1259,7 @@ END_TEST
 
 START_TEST(tc02_s21_inverse_matrix) {
   CREATE_MATRIX(mat, 2, 2, {{5, 2}, {0, -3}});
-  CREATE_MATRIX(exp_mat, 2, 2, {{-3, -2}, {0, 5}});
+  CREATE_MATRIX(exp_mat, 2, 2, {{0.2, 0.1333333}, {0, -0.3333333}});
   matrix_t res_mat = {0};
 
   int expect_res = OK, result_res = s21_inverse_matrix(&mat, &res_mat);
@@ -1276,7 +1276,7 @@ END_TEST
 
 START_TEST(tc03_s21_inverse_matrix) {
   CREATE_MATRIX(mat, 3, 3, {{2, 5, 7}, {6, 3, 4}, {5, -2, -3}});
-  CREATE_MATRIX(exp_mat, 3, 3, {{-1, 1, -1}, {38, -41, 34}, {-27, 29, -24}});
+  CREATE_MATRIX(exp_mat, 3, 3, {{1, -1, 1}, {-38, 41, -34}, {27, -29, 24}});
   matrix_t res_mat = {0};
 
   int expect_res = OK, result_res = s21_inverse_matrix(&mat, &res_mat);
@@ -1298,10 +1298,10 @@ START_TEST(tc04_s21_inverse_matrix) {
                  {5.55, -2.5, -3.33, 0},
                  {10, -10, 0, -1.0156}});
   CREATE_MATRIX(exp_mat, 4, 4,
-                {{-222.92033652, 384.98704, -46.8601308, 239.0563},
-                 {-287.211168, 377.48297472, -60.37472, -509.0016},
-                 {-155.9098942, 358.24944, -2379.08988584, 780.5605},
-                 {633.033, 73.888, 133.07, -327.543712}});
+                {{-0.0285311, 0.0492737, -0.0059975, 0.0305963},
+                 {-0.0367595, 0.0483132, -0.0077272, -0.0651460},
+                 {-0.0199545, 0.0458516, -0.3044949, 0.0999023},
+                 {0.0810206, 0.0094567, 0.0170313, -0.0419216}});
 
   matrix_t res_mat = {0};
 
